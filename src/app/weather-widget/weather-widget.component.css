@@ -1,0 +1,50 @@
+::ng-deep.mat-tab-label {
+    height: auto !important;
+    padding: 0.5rem !important;
+}
+
+.header-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header-block-day, .header-block-month{
+    padding: 0.3rem;
+}
+.header-block-number {
+    font-size: 2rem;
+}
+.header-block-temperature {
+    display: flex;
+}
+.header-block-temperature div{
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.25rem;
+}
+.cadetblue-color {
+    color: cadetblue;
+}
+.darkblue-color {
+    color: darkblue;
+    font-weight: bold;
+}
+
+table {
+    border: 1px solid rgba(0,0,0,.12);
+    margin: 1rem;
+}
+.table-header {
+    background-color: rgba(220,220,220,0.5);
+}
+.table-header th {
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 0.5rem !important
+}
+.table-data td {
+    text-align: center;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}

@@ -1,0 +1,15 @@
+.title {
+    margin-right: 1rem;
+}
+.created-by {
+    font-size: small;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
+}
+.container {
+    padding: 1rem;
+}
+.city-selection {
+    margin-right: 1rem;
+}
+

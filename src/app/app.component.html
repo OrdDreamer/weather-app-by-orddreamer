@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+    <span class="title">Погода :)</span>
+    <p class="created-by">created by OrdDreamer</p>
+</mat-toolbar>
+
+
+
+<div class="container">
+  <mat-form-field appearance="fill" class="city-selection">
+    <mat-label>Выбрать город</mat-label>
+    <mat-select [(value)]="selected">
+      <mat-option *ngFor="let option of optionsCity" [value]="option.valueCity">
+        {{option.nameCity}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-flat-button color="accent" class="showForecastButton" (click)='showWeather()' [disabled]="!selected">
+    Показать прогноз
+  </button>
+
+
+  <app-weather-widget [weatherData]="weatherData" [displayedColumns]="displayedColumns" *ngIf="showForecast">
+  </app-weather-widget>
+</div>
