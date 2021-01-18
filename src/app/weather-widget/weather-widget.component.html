@@ -61,10 +61,10 @@
           <td mat-cell *matCellDef="let element"> {{element.wind_speed}} м/с</td>
         </ng-container>
 
-        <!-- Pop column -->
-        <ng-container matColumnDef="pop">
+        <!-- Percent precipitation column -->
+        <ng-container matColumnDef="percent_precipitation">
           <th mat-header-cell *matHeaderCellDef class="th-center">Вероятность осадков</th>
-          <td mat-cell *matCellDef="let element"> {{element.pop}}% </td>
+          <td mat-cell *matCellDef="let element"> {{element.percent_precipitation}}% </td>
         </ng-container>
 
         <!-- Description column -->

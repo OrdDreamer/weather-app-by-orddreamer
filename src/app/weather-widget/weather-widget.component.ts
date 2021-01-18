@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { widgetWeatherData } from '../interfaces';
+import { WidgetWeatherData } from '../interfaces';
 
 @Component({
   selector: 'app-weather-widget',
@@ -11,7 +11,7 @@ export class WeatherWidgetComponent {
 
   constructor(private sanitizer: DomSanitizer) { };
 
-  @Input() weatherData: widgetWeatherData;
+  @Input() weatherData: WidgetWeatherData;
   @Input() displayedColumns: string[];
 
 

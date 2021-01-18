@@ -9,8 +9,8 @@
   <mat-form-field appearance="fill" class="city-selection">
     <mat-label>Выбрать город</mat-label>
     <mat-select [(value)]="selected">
-      <mat-option *ngFor="let option of optionsCity" [value]="option.valueCity">
-        {{option.nameCity}}
+      <mat-option *ngFor="let option of optionsCity" [value]="option.value">
+        {{option.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>

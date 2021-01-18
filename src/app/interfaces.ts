@@ -1,4 +1,4 @@
-export interface listInterface {
+export interface ListWeatherPoints {
         "dt": number,
         "main": {
           "temp": number,
@@ -37,11 +37,11 @@ export interface listInterface {
         "dt_txt": string
 };
 
-export interface weatherData {
+export interface WeatherData {
     "cod": string,
     "message": number,
     "cnt": number,
-    "list": listInterface[],
+    "list": ListWeatherPoints[],
     "city": {
         "id": number,
         "name": string,
@@ -56,25 +56,25 @@ export interface weatherData {
       },
 };
 
-export interface widgetListInterface {
+export interface WidgetListWeatherPoints {
   time: Date,
   temp: number,
   temp_perception: number,
   pressure: number,
   himidity: number,
   wind_speed: number,
-  pop: number,
+  percent_precipitation: number,
   description: string,
   icon: string
 };
 
-export interface widgetWeatherData {
+export interface WidgetWeatherData {
   day: string,
   number: number,
   month: string,
   temp_max: number,
   temp_min: number,
-  list: widgetListInterface[]
+  list: WidgetListWeatherPoints[]
 };
 
 

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { weatherData } from './interfaces';
+import { WeatherData } from './interfaces';
 import { API_KEY } from '../config';
 
 @Injectable({
@@ -13,12 +13,11 @@ export class WeatherClientService {
 
   constructor(private http: HttpClient) { }
 
-  private serverUrl = `
-  https://api.openweathermap.org/data/2.5/forecast`;
+  private serverUrl = `https://api.openweathermap.org/data/2.5/forecast`;
 
 
-  requestWeatherData(id: string): Observable<weatherData> {
-    return this.http.get<weatherData>(
+  requestWeatherData(id: string): Observable<WeatherData> {
+    return this.http.get<WeatherData>(
       `${this.serverUrl}?id=${id}&appid=${API_KEY}&units=metric&lang=ru`
       );
   };

@@ -1,63 +1,61 @@
 import { Injectable } from '@angular/core';
-import { weatherData, widgetListInterface, widgetWeatherData } from './interfaces';
+import { ListWeatherPoints, WeatherData, WidgetListWeatherPoints, WidgetWeatherData } from './interfaces';
+
+const PRESSURE_PASCAL_TO_MERCURY_BAROMETER = 1/1.333;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppComponentService {
 
-  constructor() { }
+  // This method changes the input data to the format required by the weather display component
+  // It distributes the disordered information to the days of the period (period 5 days)
+  weatherDataTransformation(inputData: WeatherData): WidgetWeatherData[] {
+    let outputData: WidgetWeatherData[] = new Array();
 
-  weatherDataTransformation(inputData: weatherData): widgetWeatherData[] {
+    const limitDays = 5; //limit of days to show
+    let firstDay: Date = new Date(inputData.list[0].dt_txt);
 
-    let limitDays = 5; //НАСТРОЙКА КОЛЛИЧЕСТВА ДНЕЙ ДЛЯ ПОКАЗА
-    let dayCounter: number = -1; //СЧЕТЧИК ДНЕЙ ДЛЯ ПОКАЗА
-    let currentDate = new Date(0); //ТЕКУЩАЯ ДАТА ДЛЯ РАЗДЕЛЕНИЯ ПО ДНЯМ
+    function timeDiff (firstDate: Date, secondDate: Date): number {
+      firstDate.setHours(0,0,0,0);
+      secondDate.setHours(0,0,0,0);
+      return (+secondDate - +firstDate)/(1000*3600*24);
+    };
 
-    let outputData: widgetWeatherData[] = new Array();
+    // Filtering out unnecessary timestamps
+    let listWeatherPoints: ListWeatherPoints[] = inputData.list.filter((element) => {
+      return timeDiff(firstDay,(new Date(element.dt_txt))) < limitDays;
+    });
 
+    // Sorting information (period: 5 days)
+    listWeatherPoints.forEach( (element) => {
+      let currentDate = new Date(element.dt_txt);
+      let currentPeriod = timeDiff(firstDay, (new Date(element.dt_txt)));
 
-
-    for (let i = 0; i < inputData.list.length; i++) { //ПЕРЕБОР ВСЕХ ВРЕМЕННЫХ МЕТОК
-
-      if ((new Date(inputData.list[i].dt_txt)).getDate() != currentDate.getDate()) {
-
-        if (dayCounter != -1) {
-          this.averagingTemperature(outputData[dayCounter]);
-        }; //УСРЕДНЕНИЕ ТЕМПЕРАТУРЫ ЗА ДЕНЬ, ПЕРЕД ПЕРЕХОДОМ К СЛЕДУЮЩЕМУ
-
-        dayCounter++;
-
-        if (dayCounter === limitDays) break; //ПРОВЕРКА ЛИМИТА ПОКАЗЫВАЕМЫХ ДНЕЙ
-
+      if (outputData.length < (currentPeriod + 1)) {
         outputData.push({
-          day: "",
-          number: 0,
-          month: "",
+          day: this.matchingDay(currentDate.getDay()),
+          number: currentDate.getDate(),
+          month: this.matchingMonth(currentDate.getMonth()),
           temp_max: 0,
           temp_min: 0,
           list: []
         });
+      };
 
+      outputData[currentPeriod].list.push(this.objectTransformation(element));
 
-        currentDate = new Date(inputData.list[i].dt_txt);
-
-        outputData[dayCounter].day = this.matchingDay((new Date(inputData.list[i].dt_txt)).getDay());
-        outputData[dayCounter].number = (new Date(inputData.list[i].dt_txt)).getDate();
-        outputData[dayCounter].month = this.matchingMonth((new Date(inputData.list[i].dt_txt)).getMonth());;
-
-      }; //СМЕНА ДНЯ НА СЛЕДУЮЩИЙ
-
-
-
-      outputData[dayCounter].list.push(this.objectTransformation(inputData.list[i]));
-      //КЛАДЕМ В ТЕКУЩИЙ ДЕНЬ ИЗМЕНЕННУЮ ВРЕМЕННУЮ МЕТКУ
-    };
+      // Temperature averaging over the past day
+      if (currentDate.getHours() ===  21) {
+        this.averagingTemperature(outputData[currentPeriod]);
+      }
+    });
 
     return outputData;
   };
 
-  averagingTemperature(inputObject: widgetWeatherData) {
+  // This method averages the temperature over the past day
+  averagingTemperature(inputObject: WidgetWeatherData) {
     let minTemperature: number = 0;
     let maxTemperature: number = 0;
     inputObject.list.forEach(element => {
@@ -166,24 +164,24 @@ export class AppComponentService {
     return outputData;
   }
 
-  objectTransformation(inputObject): widgetListInterface {
-    let outputObject = {
+  objectTransformation(inputObject): WidgetListWeatherPoints {
+    return {
       time: new Date(inputObject.dt_txt),
       temp: Math.floor(inputObject.main.temp),
       temp_perception: Math.floor(inputObject.main.feels_like),
       pressure: this.pressureTransformation(inputObject.main.pressure),
       himidity: inputObject.main.humidity,
       wind_speed: Number((inputObject.wind.speed).toFixed(1)),
-      pop: Math.floor(inputObject.pop*100),
+      percent_precipitation: Math.floor(inputObject.pop*100),
+      // Here we multiply by 100 in order to turn the fractional representation into an integer one
       description: inputObject.weather[0].description,
       icon: "http://openweathermap.org/img/wn/"+inputObject.weather[0].icon+".png"
 
     };
-    return outputObject;
   };
 
   pressureTransformation(inputPressure: number): number {
-    return Math.floor(inputPressure / 1.333);
+    return Math.floor(inputPressure * PRESSURE_PASCAL_TO_MERCURY_BAROMETER);
   };
 
-}
+};

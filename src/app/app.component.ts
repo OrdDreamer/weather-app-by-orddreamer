@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { weatherData, widgetListInterface, widgetWeatherData } from './interfaces';
+import { WidgetWeatherData } from './interfaces';
 
 import { WeatherClientService } from './weather-client.service';
 import { AppComponentService } from './app-component.service';
 
 
-interface cityOption {
-  nameCity: string;
-  valueCity: string;
+interface CityOption {
+  name: string;
+  value: string;
 }
 
 @Component({
@@ -19,7 +19,7 @@ export class AppComponent {
 
   constructor(private weatherClient: WeatherClientService, private appService: AppComponentService) { };
 
-  weatherData: widgetWeatherData[];
+  weatherData: WidgetWeatherData[];
   displayedColumns: string[] = [
     "time",
     "icon",
@@ -27,17 +27,17 @@ export class AppComponent {
     "pressure",
     "himidity",
     "wind_speed",
-    "pop",
+    "percent_precipitation",
     "description"
   ];
 
-  selected: cityOption;
+  selected: CityOption;
   showForecast: boolean = false;
 
-  optionsCity: cityOption[] = [
-    { nameCity: 'Чернигов', valueCity: '710735' },
-    { nameCity: 'Киев', valueCity: '703448' },
-    { nameCity: 'Бровары', valueCity: '711390' }
+  readonly optionsCity: CityOption[] = [
+    { name: 'Чернигов', value: '710735' },
+    { name: 'Киев', value: '703448' },
+    { name: 'Бровары', value: '711390' }
   ];
 
 
